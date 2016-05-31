@@ -52,7 +52,7 @@
 	<job id="testJob" xmlns="http://www.springframework.org/schema/batch">
 		<step id="step1">
 			<tasklet>
-				<chunk reader="itemReader" writer="itemWriter"
+				<chunk reader="itemReader" writer="flatFileItemWriter"
 					commit-interval="1" />
 			</tasklet>
 		</step>
@@ -74,18 +74,18 @@
 
 	<!-- csv file writer -->
 	<bean id="flatFileItemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter">
-		<property name="resource" value="file:csv/outputs/users.all.csv" />
+		<property name="resource" value="file:csv/outputs/users.all.txt" />
 		<property name="appendAllowed" value="true" />
 		<property name="lineAggregator">
 			<bean
-				class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
-				<property name="delimiter" value="," />
+				class="org.springframework.batch.item.file.transform.FormatterLineAggregator">
 				<property name="fieldExtractor">
 					<bean
 						class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
 						<property name="names" value="id, username, password, age" />
 					</bean>
 				</property>
+				<property name="format" value="%-2.2s%-12.12s%-11.11s%-16.16s" /> 
 			</bean>
 		</property>
 	</bean>
